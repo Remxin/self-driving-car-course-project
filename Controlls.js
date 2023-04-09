@@ -1,11 +1,18 @@
 export class Controlls {
-    constructor() {
+    constructor(controlType) {
         this.forward = false
         this.left = false
         this.right = false
         this.reverse = false
 
-        this.#addEventsListeners()
+        switch (controlType) {
+            case "KEYS":
+                this.#addEventsListeners()
+                break
+            case "DUMMY":
+                this.forward = true
+                break
+        }
     }
 
     #addEventsListeners() { // private method
