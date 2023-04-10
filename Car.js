@@ -1,4 +1,5 @@
 import { Controlls } from "./Controlls.js"
+import { NeuralNetwork } from "./Network.js"
 import { Sensor } from "./Sensor.js"
 import { polysIntersect } from "./utils.js"
 
@@ -15,7 +16,14 @@ export class Car {
         this.friction = 0.1
         this.maxSpeed = maxSpeed
 
-        if (controlType !== "DUMMY") this.sensor = new Sensor(this)
+        this.useBrain = controlType === "AI"
+
+        if (controlType !== "DUMMY") {
+            this.sensor = new Sensor(this)
+            this.brain = new NeuralNetwork(
+                [this.sensor.rayCount, 6, 4]
+            )
+        }
         
         this.controlls = new Controlls(controlType)
     }
@@ -25,7 +33,24 @@ export class Car {
         this.#move()
         this.polygon = this.#createPolygon()
         this.damaged = this.#assessDamage(roadBorders, traffic)
-        if(this.sensor) this.sensor.update(roadBorders, traffic)
+        if(this.sensor) {
+            this.sensor.update(roadBorders, traffic)
+
+            const offsets = this.sensor.readings.map((s) => 
+            s === null ? 0 : 1-s.offset
+            )
+            
+
+            const outputs = NeuralNetwork.feedForward(offsets, this.brain)
+            console.log(outputs)
+
+            if (this.useBrain) {
+                this.controlls.forward = outputs[0]
+                this.controlls.left = outputs[1]
+                this.controlls.right = outputs[2]
+                this.controlls.reverse = outputs[3]
+            }
+        }
     }
 
     #assessDamage(roadBorders, traffic) {

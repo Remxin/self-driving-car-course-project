@@ -7,14 +7,16 @@
 body {
     background-color: #ababab;
     display: flex;
-    /* align-items: center; */
+    flex-direction: row;
     justify-content: center;
     width: 100%;
     height: 100vh;
 }
 
-#canvas {
+#networkCanvas {
+    background-color: #121212;
+}
+
+#carCanvas {
     background-color: #dedede;
-    /* width: 100%; */
-    /* height: 100vh; */
 }
