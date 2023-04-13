@@ -20,3 +20,20 @@ body {
 #carCanvas {
     background-color: #dedede;
 }
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    gap: 5px;
+}
+
+.buttons button {
+    width: 100%;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

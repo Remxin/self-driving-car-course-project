@@ -42,7 +42,6 @@ export class Car {
             
 
             const outputs = NeuralNetwork.feedForward(offsets, this.brain)
-            console.log(outputs)
 
             if (this.useBrain) {
                 this.controlls.forward = outputs[0]
@@ -54,6 +53,7 @@ export class Car {
     }
 
     #assessDamage(roadBorders, traffic) {
+        // console.log(traffic)
         for (let i = 0; i < roadBorders.length; i++) {
             if (polysIntersect(this.polygon, roadBorders[i])) return true
         }
@@ -135,7 +135,7 @@ export class Car {
         this.position.y -= Math.cos(this.angle)*this.speed
     }
 
-    draw(ctx, color) {
+    draw(ctx, color, drawSensor = false) {
         ctx.beginPath()
         ctx.moveTo(this.polygon[0].x, this.polygon[0].y)
 
@@ -148,6 +148,6 @@ export class Car {
 
         ctx.fill()
 
-        if (this.sensor) this.sensor.draw(ctx)
+        if (this.sensor && drawSensor) this.sensor.draw(ctx)
     }
 }
