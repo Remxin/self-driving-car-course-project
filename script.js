@@ -2,6 +2,7 @@
 import { Car } from "./Car.js"
 import { Road } from "./Road.js"
 import { Visualizer } from "./Visualizer.js"
+import { NeuralNetwork } from "./Network.js"
 
 // buttons onclicks
 const btns = {
@@ -22,18 +23,29 @@ const carCtx = carCanvas.getContext("2d")
 const networkCtx = networkCanvas.getContext("2d")
 
 const road = new Road(carCanvas.width/2, carCanvas.width * 0.9)
-const N = 50
+const N = 120
 const cars = generateCars(N)
 let bestCar = cars[0]
 
 if(localStorage.getItem("bestBrain")) {
+    for (let i = 0; i < cars.length; i++) {
+        cars[i].brain = JSON.parse(localStorage.getItem("bestBrain"))
+
+        if (i != 0) {
+            NeuralNetwork.mutate(cars[i].brain, 0.2)
+        }
+    }
     bestCar.brain = JSON.parse(localStorage.getItem("bestBrain"))
 }
 
 const traffic = [
     new Car(road.getLaneCenter(1), -100, 30, 60, "DUMMY"),
     new Car(road.getLaneCenter(0), -300, 30, 60, "DUMMY"),
-    new Car(road.getLaneCenter(2), -400, 30, 60, "DUMMY")
+    new Car(road.getLaneCenter(2), -400, 30, 60, "DUMMY"),
+    new Car(road.getLaneCenter(3), -550, 30, 60, "DUMMY"),
+    new Car(road.getLaneCenter(2), -650, 30, 60, "DUMMY"),
+    new Car(road.getLaneCenter(3), -650, 30, 60, "DUMMY"),
+    new Car(road.getLaneCenter(1), -800, 30, 60, "DUMMY")
 ]
 
 animate()
